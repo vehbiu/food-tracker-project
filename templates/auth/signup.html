@@ -1,0 +1,17 @@
+{% extends "auth/login.html" %}
+
+{% block top %}Please sign-up{% endblock %}
+
+{% block button %}Sign-up{% endblock %}
+
+{% block username %}
+<div class="form-floating">
+    <input type="text" name="uname" class="form-control rounded-bottom-0 border-bottom-0 rounded-top-0 border-top-0" id="f-name" placeholder="Username">
+    <label for="f-name">Username</label>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/assets/scripts/auth/signup.js"></script>
+{% endblock %}

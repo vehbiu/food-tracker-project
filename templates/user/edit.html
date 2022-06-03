@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+  <h1 class="text-primary-emphasis">Editing Recipe: {{ recipe.name }}</h1>
+  <p class="text-body-secondary">Options: <button class="btn btn-success" data-bs-toggle="modal"
+      data-bs-target="#info-modal"><i class="fa-solid fa-pen"></i> Edit General Info</button></p>
+  <hr class="text-center m-auto mb-3" width="50%" />
+  <h3>Ingredients</h3>
+
+  <div class="input-group w-ing m-auto ing" autocomplete="off">
+    <input type="number" class="form-control btn-outline-secondary mw-5 top" placeholder="#" disabled>
+    <input type="text" class="form-control mw-20 top" placeholder="Unit" disabled>
+    <input type="text" class="form-control top" placeholder="Name" disabled>
+  </div>
+
+  <div id="ingredient-list">
+    {% for ingredient in recipe.ingredients %}
+    <div class="input-group w-ing m-auto ing" autocomplete="off">
+      <input class="form-control btn-outline-secondary mw-5 ing" type="number" name="amount"
+        placeholder="{{ ingredient.amount or 'Amount'}}" value="{{ ingredient.amount or '' }}">
+      <input type="text" class="form-control mw-20 ing" name="unit" placeholder="{{ ingredient.unit or 'Unit' }}"
+        value="{{ ingredient.unit or '' }}">
+      <input type="text" class="form-control ing" name="name" placeholder="{{ ingredient.name or 'Ingredient Name' }}"
+        value="{{ ingredient.name or '' }}">
+    </div>
+    {% endfor %}
+  </div>
+  <button class="btn w-ing border-top-0 rounded-top-0 mb-4 add-ing" id="add-ingredient">Add Ingredient</button>
+
+  <hr class="m-auto mb-3" width="50%" />
+  <h3 class="fs-1">Steps ({{ recipe.steps | length }})</h3>
+  <div class="step-container">
+    <!-- <span class="text-muted">Drag and drop to reorder</span> -->
+    {% for i in range(recipe.steps | length) %}
+    <div class="step">
+      <p class="step-number">{{ i + 1 }}.</p>
+      <!-- <input type="text" class="form-control step-text" placeholder="Step Content" value="{{ recipe.steps[i] }}"> -->
+      <div class="input-group mb-3" data-step="{{ i + 1 }}">
+        <input type="text" class="form-control" name="step-content" placeholder="Step Content" aria-label="Step Content"
+          aria-describedby="step-actions" value="{{ recipe.steps[i] or '' }}">
+        <span class="input-group-text" id="step-actions">
+          <a href="#" onClick="deleteStep(this)"><i class="fa-solid fa-trash me-1" style="color: red"></i></a>
+          <a href="#" onClick="addStep();" class="step-number"><i class="fa-solid fa-plus fs-5"></i></a>
+        </span>
+      </div>
+    </div>
+    {% endfor %}
+
+
+  </div>
+  <div class="step-container">
+    <p class="text-muted"><strong class="text-muted">INFO: </strong>Steps numbers may be messed up until save</p>
+    <button class="btn btn-primary" id="submit-recipe"><i class="fa-solid fa-floppy-disk"></i> Save Steps &
+      Ingredients</button>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+  .card {
+    position: relative;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: clamp(18rem, 60rem, 100%);
+  }
+
+  .mw-5 {
+    max-width: clamp(5rem, 5%, 100%);
+  }
+
+  .mw-20 {
+    max-width: clamp(10rem, 20%, 100%);
+    /* max-width: 20%; */
+  }
+
+  .w-ing {
+    width: clamp(20rem, 40%, 30rem);
+  }
+
+  .ing {
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+
+  .add-ing {
+    background: var(--bs-secondary-bg);
+  }
+
+  .add-ing:hover {
+    opacity: 0.5;
+    background: var(--bs-tertiary-bg);
+  }
+
+  .top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 0;
+  }
+
+  .step-container {
+    text-align: center;
+    margin: auto;
+    background: var(--bs-secondary-bg);
+    border-radius: 0.5rem;
+    width: clamp(400px, 40%, 800px);
+    padding: 2rem;
+    margin-bottom: 3vh;
+  }
+
+
+  .step {
+    width: clamp(30rem, 40%, 50rem);
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin: 0.5rem;
+  }
+
+  .step>* {
+    margin: 0.5rem;
+  }
+
+  .step>.step-number {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .step-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+{% endblock %}
+
+
+{% block modals %}
+<!-- Modal -->
+<div class="modal fade" id="info-modal" tabindex="-1" aria-labelledby="info-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="info-modal-label">Change Information</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- <p>We just need a bit of information...</p> -->
+        <form class="p-2 bg-black rounded-3" id="ch-form" autocomplete="off">
+          Name
+          <input name="name" class="form-control mb-1" type="text" value="{{ recipe.name }}">
+          Description
+          <input name="desc" class="form-control mb-1" type="text" value="{{ recipe.desc }}">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nevermind!</button>
+        <button type="button" class="btn btn-primary" id="ch-btn" data-bs-toggle="modal"
+          data-bs-target="#info-modal">Change Information</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<!-- FontAwesome -->
+<script src="https://kit.fontawesome.com/d5a9b2e8f1.js" crossorigin="anonymous"></script>
+<script src="/static/assets/scripts/edit.js"></script>
+{% endblock %}

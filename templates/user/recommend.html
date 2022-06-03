@@ -1,0 +1,30 @@
+{% extends "user/index.html" %}
+{% block content %}
+<div class="text-center">
+  <h1 class="text-primary-emphasis">Recommended Recipes</h1>
+  <p class="text-body-secondary">Finding Recommendations for <span class="text-body-emphasis">{{ recipe.name }}</span>
+  </p>
+  <hr class="text-center m-auto mb-2" width="50%" />
+
+
+  <div class="d-flex flex-wrap align-items-center justify-content-center">
+    {% for recipe in recipes %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-success-emphasis">
+          {{ recipe.name }}
+        </h5>
+        <p class="card-text border-dark-subtle border p-3 rounded-2 text-muted">{{ recipe.desc or "No description
+          provided" }}</p>
+        <a class="card-link text-warning-emphasis text-decoration-none">{{ recipe.ingredients | length }}
+          Ingredients</a>
+        <a class="text-decoration-none text-secondary">-</a>
+        <a class="card-link text-warning-emphasis text-decoration-none">{{ recipe.steps | length }} Steps</a>
+      </div>
+      <button class="overlay" data-rid="{{ recipe._id }}">View</button>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+*:not(svg):not(path) {
+  /* background-color: #1e1e1e; */
+  color: #fff;
+  font-family: 'Axiforma', sans-serif;
+}
+
+@font-face {
+  font-family: 'Axiforma';
+  src: local('Axiforma Redular'), local('Axiforma-Redular'),
+    url('/static/assets/fonts/Axiforma-Regular.woff2') format('woff2'),
+    url('/static/assets/fonts/Axiforma-Regular.woff') format('woff'),
+    url('/static/assets/fonts/Axiforma-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@keyframes blowUpContent {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  99.9% {
+    transform: scale(2);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}

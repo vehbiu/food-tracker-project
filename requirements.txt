@@ -1,0 +1,5 @@
+uvicorn
+quart
+jinja2
+pymongo[srv]
+bcrypt

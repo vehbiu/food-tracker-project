@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}{{ recipe.name }} - Recipe Tracker{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+  <h1 class="text-primary-emphasis">{{ recipe.name }}</h1>
+  <hr class="text-center m-auto mb-3" width="50%" />
+  <h3>Ingredients</h3>
+
+
+  <div class="ingredient-list">
+    {% for ingredient in recipe.ingredients %}
+    <div class="ingredient">
+      <div class="ingredient-number">
+        {{ loop.index }}
+      </div>
+      <div class="ingredient-name">
+        {% set amount = ingredient.amount %}
+        {% if amount.endswith ('.0') %}
+        {% set amount = amount[:-2] %}
+        {% endif %}
+        {{ amount }} {{ ingredient.unit }} {{ ingredient.name }}
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+
+  <hr class="m-auto mb-3" width="50%" />
+  <h3>Steps</h3>
+  <div class="step-list mb-3">
+    {% for step in recipe.steps %}
+    <div class="ingredient">
+      <div class="ingredient-number">
+        {{ loop.index }}
+      </div>
+      <div class="ingredient-name text-left lol">
+        {{ step }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <a role="button" class="btn btn-primary mb-5" href="/@user/recipes/{{ recipe._id }}/recommendations">
+    Find Recipes Like This
+  </a>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+  .ingredient {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .ingredient>.ingredient-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+
+  .ingredient-list {
+    text-align: center;
+    margin: auto;
+    width: clamp(300px, 50%, 500px);
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; */
+  }
+
+  .step-list {
+    text-align: center;
+    margin: auto;
+    width: clamp(300px, 60%, 700px)
+  }
+
+  .lol {
+    margin-bottom: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .text-left {
+    text-align: left;
+  }
+</style>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="/static/assets/scripts/view.js"></script>
+{% endblock %}

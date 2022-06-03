@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+{% if not g.user %}
+<h1 class="text-center">Welcome!</h1>
+<p class="text-center">Click the <a class="btn btn-primary" href="/auth/login">Login</a> or &nbsp;<a
+    class="btn btn-primary" href="/auth/signup">Sign-up</a> buttons to Continue</p>
+{% else %}
+<h1 class="text-center">Welcome back!</h1>
+<hr style="width: clamp(200px, 65%, 500px)" class="m-auto mb-2" />
+<div class="text-center">
+  <p class="mb-2">What do you want to do?</p>
+  <br />
+  <a href="/@user" class="btn btn-outline-secondary">
+    View your Recipes
+  </a>
+  <a href="/@user/recipes/create" class="btn btn-primary">
+    Create a new Recipe
+  </a>
+</div>
+{% endif %}
+{% endblock %}

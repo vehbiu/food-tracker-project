@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+  <h1 class="text-primary-emphasis">Welcome back, {{ g.user.uname | capitalize }}!</h1>
+  <p class="text-body-secondary">You can view your profile and manage your recipes here.</p>
+  <hr class="text-center m-auto" width="50%" />
+  <div class="d-flex flex-wrap align-items-center justify-content-center">
+    {% for recipe in g.user.get_reciepies() %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-success-emphasis">
+          {{ recipe.name }}
+        </h5>
+        <p class="card-text border-dark-subtle border p-3 rounded-2 text-muted">{{ recipe.desc or "No description
+          provided" }}</p>
+        <a class="card-link text-warning-emphasis text-decoration-none">{{ recipe.ingredients | length }}
+          Ingredients</a>
+        <a class="text-decoration-none text-secondary">-</a>
+        <a class="card-link text-warning-emphasis text-decoration-none">{{ recipe.steps | length }} Steps</a>
+      </div>
+      <button class="overlay" data-rid="{{ recipe._id }}" data-action="edit">Change/Edit</button>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+  .card {
+    position: relative;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 18rem;
+  }
+
+  .card-body>p {
+    text-overflow: ellipsis;
+  }
+
+  .card>.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    backdrop-filter: blur(5px);
+    overflow: hidden;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: 0.3s ease;
+  }
+
+  .card:hover {
+    cursor: pointer;
+  }
+
+  .card:hover .overlay {
+    visibility: visible;
+    display: block;
+    opacity: 1;
+    /* width: 100%; */
+  }
+
+  button.overlay {
+    background: transparent;
+    border: none;
+  }
+</style>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    console.groupCollapsed("Event Listener Log");
+    document.querySelectorAll("[data-rid]").forEach(elem => {
+      elem.addEventListener("click", e => {
+        const url = `/@user/recipes/${elem.dataset.rid}/${elem.dataset.action || "view"}`;
+        e.ctrlKey ? window.open(url, "_blank") : window.location = url;
+      });
+      console.log(`Added event listener to ${elem.dataset.rid}`);
+    });
+    console.groupEnd();
+  });
+</script>
+{% endblock %}

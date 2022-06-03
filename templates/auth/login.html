@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center">
+    <form id="{% block fid %}form-login{% endblock %}" autocomplete="off" style="
+        display: inline-block;
+        text-align: center;
+         width: clamp(300px, 50%, 500px);
+    ">
+        <img class="mb-4" src="/static/assets/img/logo.png" alt="" width="72" height="57">
+        <h1 class="h3 mb-3 fw-normal">{% block top %}Please sign in{% endblock %}</h1>
+
+        <div class="form-floating">
+            <input type="email" name="email" class="form-control rounded-bottom-0 border-bottom-0" id="f-inp" placeholder="name@example.com">
+            <label for="f-inp">Email address</label>
+        </div>
+
+        {% block username %}{% endblock %}
+
+        <div class="form-floating">
+            <input type="password" name="password" class="form-control rounded-top-0 border-top-0" id="f-pass" placeholder="Password">
+            <label for="f-pass">Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label>
+                <br />
+                <input name="remember" type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">{% block button %}Sign in{% endblock %}</button>
+    </form>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="/static/assets/scripts/auth/login.js"></script>
+{% endblock %}
